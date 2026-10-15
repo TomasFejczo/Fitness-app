@@ -1,9 +1,12 @@
-package com.fitapp;
+package com.fitapp.services;
 
 
-import lombok.AllArgsConstructor;
+import com.fitapp.WorkoutRequest;
+import com.fitapp.entity.Exercise;
+import com.fitapp.repository.ExerciseRepo;
+import com.fitapp.repository.WorkoutRepo;
+import com.fitapp.entity.Workout;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +20,23 @@ import java.util.Optional;
 public class WorkoutService {
     @Autowired
     private final WorkoutRepo serviceRepo;
+    private final ExerciseRepo exerciseRepo;
 
+
+    public Workout createWorkout(WorkoutRequest request){
+        Exercise exercise = exerciseRepo.findById(request.getExerciseId()).orElseThrow(() -> new IllegalArgumentException("Cvik s ID " + request.getExerciseId() + " neexistuje!"));
+
+        Workout workout = new Workout();
+        workout.setExercise(exercise);
+        workout.setWeight(request.getWeight());
+        workout.setReps(request.getReps());
+        workout.setSets(request.getSets());
+        return serviceRepo.save(workout);
+    }
     public List<Workout> getAllWorkouts(){
         return serviceRepo.findAll();
     }
-
+    /*
     public Workout getWorkoutById(Long id){
         return serviceRepo.findById(id).orElse(null);
     }
@@ -57,5 +72,5 @@ public class WorkoutService {
             return false;
         }
 
-    }
+    }*/
 }
