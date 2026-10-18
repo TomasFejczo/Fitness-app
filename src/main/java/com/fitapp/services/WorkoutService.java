@@ -19,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class WorkoutService {
     @Autowired
-    private final WorkoutRepo serviceRepo;
+    private final WorkoutRepo workoutRepo;
     private final ExerciseRepo exerciseRepo;
 
 
@@ -31,11 +31,12 @@ public class WorkoutService {
         workout.setWeight(request.getWeight());
         workout.setReps(request.getReps());
         workout.setSets(request.getSets());
-        return serviceRepo.save(workout);
+        return workoutRepo.save(workout);
     }
     public List<Workout> getAllWorkouts(){
-        return serviceRepo.findAll();
+        return workoutRepo.findAll();
     }
+
     /*
     public Workout getWorkoutById(Long id){
         return serviceRepo.findById(id).orElse(null);

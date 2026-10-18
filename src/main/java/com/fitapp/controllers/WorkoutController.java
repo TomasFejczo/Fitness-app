@@ -22,6 +22,12 @@ public class WorkoutController {
         Workout savedWorkout = workoutService.createWorkout(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
+
+    @GetMapping
+    public ResponseEntity<?> getAllWorkouts(){
+        List<Workout> workouts = workoutService.getAllWorkouts();
+        return ResponseEntity.ok(workouts);
+    }
   /*  @GetMapping("/{id}")
     public ResponseEntity<?> getWorkoutById(@PathVariable long id){
         Workout workout = repo.getWorkoutById(id);
