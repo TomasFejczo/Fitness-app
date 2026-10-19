@@ -21,6 +21,10 @@ public class DataInit implements CommandLineRunner {
             exerciseRepo.save(new Exercise("Benchpress", "Hrudnik"));
             exerciseRepo.save(new Exercise("Drepy", "Nohy"));
             exerciseRepo.save(new Exercise("Mrtvy tah", "Chrbat"));
+            exerciseRepo.save(new Exercise("Shoulderpress", "Ramena"));
+            exerciseRepo.save(new Exercise("Lat Pulldown", "Chrbat"));
+            exerciseRepo.save(new Exercise("Incline dumbell press", "Hrudnik"));
+            exerciseRepo.save(new Exercise("Predkovapanie", "Nohy"));
             System.out.println("Zakladne cviky boli pridane do databazy");
 
         }

@@ -2,7 +2,6 @@ package com.fitapp.services;
 
 
 import com.fitapp.entity.Exercise;
-import com.fitapp.exceptions.ResourceNotFoundExceptions;
 import com.fitapp.repository.ExerciseRepo;
 import lombok.Data;
 import org.springframework.stereotype.Service;
@@ -23,14 +22,11 @@ public class ExerciseService {
     }
 
     public List<Exercise> searchByName(String exerciseName){
-        List<Exercise> exercises = exerciseRepo.findByExerciseNameContainingIgnoreCase(exerciseName);
-        if(exercises.isEmpty()){
-            throw new ResourceNotFoundExceptions("Pre zadany nazov" + exerciseName + "sa nenasiel cvik");
-        }
-        return exercises;
+        return exerciseRepo.findByExerciseNameContainingIgnoreCase(exerciseName);
+
     }
 
-    public List<Exercise> searchByMuscleGroup(String musleGroupName){
-        return exerciseRepo.findByMuscleGroupContainingIgnoreCase(musleGroupName);
+    public List<Exercise> searchByMuscleGroup(String muscleGroupName){
+        return exerciseRepo.findByMuscleGroupContainingIgnoreCase(muscleGroupName);
     }
 }

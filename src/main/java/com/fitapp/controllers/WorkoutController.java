@@ -4,6 +4,7 @@ package com.fitapp.controllers;
 import com.fitapp.WorkoutRequest;
 import com.fitapp.entity.Workout;
 import com.fitapp.services.WorkoutService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<Workout> createWorkout(@RequestBody WorkoutRequest request) {
+    public ResponseEntity<Workout> createWorkout(@Valid @RequestBody WorkoutRequest request) {
         Workout savedWorkout = workoutService.createWorkout(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
