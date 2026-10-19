@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fitapp.exceptions.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,6 +36,13 @@ public class WorkoutService {
     }
     public List<Workout> getAllWorkouts(){
         return workoutRepo.findAll();
+    }
+
+    public void deleteWorkout(Long id){
+        if(!workoutRepo.existsById(id)){
+            throw new ResourceNotFoundException("Treningovy zaznam s id " + id + " neexistuje");
+        }
+        workoutRepo.deleteById(id);
     }
 
     /*

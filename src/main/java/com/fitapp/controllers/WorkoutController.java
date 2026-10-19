@@ -10,7 +10,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.print.DocFlavor;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/workouts")
@@ -28,6 +31,15 @@ public class WorkoutController {
     public ResponseEntity<?> getAllWorkouts(){
         List<Workout> workouts = workoutService.getAllWorkouts();
         return ResponseEntity.ok(workouts);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Map<String,String>> deleteWorkout(@PathVariable Long id){
+        workoutService.deleteWorkout(id);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message","Treningovy zaznam s ID" + id + "bol zmazany");
+        return ResponseEntity.ok(response);
     }
   /*  @GetMapping("/{id}")
     public ResponseEntity<?> getWorkoutById(@PathVariable long id){
