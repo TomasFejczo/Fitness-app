@@ -2,6 +2,7 @@ package com.fitapp.services;
 
 
 import com.fitapp.WorkoutRequest;
+import com.fitapp.dto.WorkoutResponse;
 import com.fitapp.entity.Exercise;
 import com.fitapp.repository.ExerciseRepo;
 import com.fitapp.repository.WorkoutRepo;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.fitapp.exceptions.ResourceNotFoundException;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,7 +26,7 @@ public class WorkoutService {
     private final ExerciseRepo exerciseRepo;
 
 
-    public Workout createWorkout(WorkoutRequest request){
+    public WorkoutResponse createWorkout(WorkoutRequest request){
         Exercise exercise = exerciseRepo.findById(request.getExerciseId()).orElseThrow(() -> new IllegalArgumentException("Cvik s ID " + request.getExerciseId() + " neexistuje!"));
 
         Workout workout = new Workout();
@@ -32,10 +34,25 @@ public class WorkoutService {
         workout.setWeight(request.getWeight());
         workout.setReps(request.getReps());
         workout.setSets(request.getSets());
-        return workoutRepo.save(workout);
+
+        workout.setDate(request.getDate() != null ? request.getDate() : LocalDate.now());
+
+        Workout saved = workoutRepo.save(workout);
+
+        return mapToResponse(saved);
     }
-    public List<Workout> getAllWorkouts(){
-        return workoutRepo.findAll();
+    public List<WorkoutResponse> getAllWorkouts(){
+        return workoutRepo.findAll().stream().map(this::mapToResponse).toList();}
+
+    private WorkoutResponse mapToResponse(Workout workout) {
+        return new WorkoutResponse(workout.getId(),
+                workout.getExercise().getExerciseName(),
+                workout.getExercise().getMuscleGroup(),
+                workout.getWeight(),
+                workout.getSets(),
+                workout.getReps(),
+                workout.getDate()
+        );
     }
 
     public void deleteWorkout(Long id){

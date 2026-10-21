@@ -2,6 +2,7 @@ package com.fitapp.controllers;
 
 
 import com.fitapp.WorkoutRequest;
+import com.fitapp.dto.WorkoutResponse;
 import com.fitapp.entity.Workout;
 import com.fitapp.services.WorkoutService;
 import jakarta.validation.Valid;
@@ -22,15 +23,15 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<Workout> createWorkout(@Valid @RequestBody WorkoutRequest request) {
-        Workout savedWorkout = workoutService.createWorkout(request);
+    public ResponseEntity<WorkoutResponse> createWorkout(@Valid @RequestBody WorkoutRequest request) {
+        WorkoutResponse savedWorkout = workoutService.createWorkout(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllWorkouts(){
-        List<Workout> workouts = workoutService.getAllWorkouts();
-        return ResponseEntity.ok(workouts);
+    public ResponseEntity<List<WorkoutResponse>> getAllWorkouts(){
+
+        return ResponseEntity.ok(workoutService.getAllWorkouts());
     }
 
     @DeleteMapping("/{id}")
@@ -38,7 +39,7 @@ public class WorkoutController {
         workoutService.deleteWorkout(id);
 
         Map<String, String> response = new HashMap<>();
-        response.put("message","Treningovy zaznam s ID" + id + "bol zmazany");
+        response.put("message","Treningovy zaznam s ID " + id + " bol zmazany");
         return ResponseEntity.ok(response);
     }
   /*  @GetMapping("/{id}")

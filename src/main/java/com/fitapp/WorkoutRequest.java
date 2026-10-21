@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDate;
+
 @Getter
 @Setter
 public class WorkoutRequest {
@@ -23,4 +25,5 @@ public class WorkoutRequest {
     @NotNull(message = "Počet opakovaní musí byť zadaný")
     @Min(value = 1, message = "Minimálny počet opakovaní je 1")
     private int reps;
+    private LocalDate date;
 }
