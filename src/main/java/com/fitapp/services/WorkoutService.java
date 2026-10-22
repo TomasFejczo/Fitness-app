@@ -4,7 +4,9 @@ package com.fitapp.services;
 import com.fitapp.WorkoutRequest;
 import com.fitapp.dto.WorkoutResponse;
 import com.fitapp.entity.Exercise;
+import com.fitapp.entity.User;
 import com.fitapp.repository.ExerciseRepo;
+import com.fitapp.repository.UserRepo;
 import com.fitapp.repository.WorkoutRepo;
 import com.fitapp.entity.Workout;
 import lombok.Data;
@@ -24,10 +26,13 @@ public class WorkoutService {
     @Autowired
     private final WorkoutRepo workoutRepo;
     private final ExerciseRepo exerciseRepo;
+    private final UserRepo userRepo;
 
 
-    public WorkoutResponse createWorkout(WorkoutRequest request){
+    public WorkoutResponse createWorkout(WorkoutRequest request, String username){
         Exercise exercise = exerciseRepo.findById(request.getExerciseId()).orElseThrow(() -> new IllegalArgumentException("Cvik s ID " + request.getExerciseId() + " neexistuje!"));
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(()->new ResourceNotFoundException("Pouzivatel nenajdeny: " + username));
 
         Workout workout = new Workout();
         workout.setExercise(exercise);
@@ -37,12 +42,17 @@ public class WorkoutService {
 
         workout.setDate(request.getDate() != null ? request.getDate() : LocalDate.now());
 
+        workout.setUser(user);
+
         Workout saved = workoutRepo.save(workout);
 
         return mapToResponse(saved);
     }
-    public List<WorkoutResponse> getAllWorkouts(){
-        return workoutRepo.findAll().stream().map(this::mapToResponse).toList();}
+    public List<WorkoutResponse> getAllWorkouts(String name){
+        User user = userRepo.findByUsername(name)
+                .orElseThrow(()-> new ResourceNotFoundException("Používateľ nenájdený: " + name));
+        List<Workout> workouts = workoutRepo.findByUser(user);
+        return workouts.stream().map(this::mapToResponse).toList();}
 
     private WorkoutResponse mapToResponse(Workout workout) {
         return new WorkoutResponse(workout.getId(),

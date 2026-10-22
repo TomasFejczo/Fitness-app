@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final JwtService jwtService;
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
 
@@ -34,7 +35,7 @@ public class UserService {
         if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
             throw new ResourceNotFoundException("Nespravne meno alebo heslo");
         }
-        return "Uspesne prihlaseny";
+        return jwtService.generateToken(user.getUsername());
     }
 
 }

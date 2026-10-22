@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.print.DocFlavor;
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,15 +24,17 @@ public class WorkoutController {
     private final WorkoutService workoutService;
 
     @PostMapping
-    public ResponseEntity<WorkoutResponse> createWorkout(@Valid @RequestBody WorkoutRequest request) {
-        WorkoutResponse savedWorkout = workoutService.createWorkout(request);
+    public ResponseEntity<WorkoutResponse> createWorkout(@Valid @RequestBody WorkoutRequest request, Principal principal) {
+        String username = principal.getName();
+        WorkoutResponse savedWorkout = workoutService.createWorkout(request, username);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedWorkout);
     }
 
     @GetMapping
-    public ResponseEntity<List<WorkoutResponse>> getAllWorkouts(){
-
-        return ResponseEntity.ok(workoutService.getAllWorkouts());
+    public ResponseEntity<List<WorkoutResponse>> getAllWorkouts(Principal principal){
+        String username = principal.getName();
+        List<WorkoutResponse> workouts = workoutService.getAllWorkouts(username);
+        return ResponseEntity.ok(workouts);
     }
 
     @DeleteMapping("/{id}")
