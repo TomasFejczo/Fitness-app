@@ -1,4 +1,4 @@
-package com.fitapp;
+package com.fitapp.dto;
 
 
 import jakarta.validation.constraints.Max;

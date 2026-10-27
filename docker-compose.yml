@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: fitapp-postgres
+    environment:
+      POSTGRES_DB: fitapp
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 1503
+      PGDATA: /car/lib/postgresql/datapgdata
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - fitapp-network
+  app:
+    build: .
+    container_name: fitapp
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_NAME: fitapp
+      DB_USER: postgres
+      DB_PASSWORD: "1503"
+    networks:
+      - fitapp-network
+volumes:
+  postgres_data:
+
+networks:
+  fitapp-network:
+    driver: bridge

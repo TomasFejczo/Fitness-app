@@ -1,8 +1,9 @@
 package com.fitapp.services;
 
 
-import com.fitapp.WorkoutRequest;
+import com.fitapp.dto.WorkoutRequest;
 import com.fitapp.dto.WorkoutResponse;
+import com.fitapp.dto.WorkoutUpdateRequest;
 import com.fitapp.entity.Exercise;
 import com.fitapp.entity.User;
 import com.fitapp.repository.ExerciseRepo;
@@ -17,7 +18,6 @@ import com.fitapp.exceptions.ResourceNotFoundException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Data
@@ -65,12 +65,23 @@ public class WorkoutService {
         );
     }
 
-    public void deleteWorkout(Long id){
-        if(!workoutRepo.existsById(id)){
-            throw new ResourceNotFoundException("Treningovy zaznam s id " + id + " neexistuje");
-        }
-        workoutRepo.deleteById(id);
+    public void deleteWorkout(Long id, String username){
+        Workout workout = workoutRepo.findByIdAndUserUsername(id, username)
+                .orElseThrow(()-> new ResourceNotFoundException("Trening s id " + id + " sa nenasiel"));
+        workoutRepo.delete(workout);
     }
+
+    public WorkoutResponse updateWorkout(Long id, WorkoutUpdateRequest workoutUpdateRequest, String username){
+        Workout workout = workoutRepo.findByIdAndUserUsername(id, username)
+                .orElseThrow(() -> new ResourceNotFoundException("Trening s id " + id + " sa nenasiel"));
+        workout.setSets(workoutUpdateRequest.getSets());
+        workout.setReps(workoutUpdateRequest.getReps());
+        workout.setWeight(workoutUpdateRequest.getWeight());
+
+        Workout update = workoutRepo.save(workout);
+        return mapToResponse(update);
+    }
+
 
     /*
     public Workout getWorkoutById(Long id){
