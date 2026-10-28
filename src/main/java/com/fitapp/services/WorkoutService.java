@@ -81,43 +81,4 @@ public class WorkoutService {
         Workout update = workoutRepo.save(workout);
         return mapToResponse(update);
     }
-
-
-    /*
-    public Workout getWorkoutById(Long id){
-        return serviceRepo.findById(id).orElse(null);
-    }
-
-    public Workout addWorkout(Workout workout) {
-        return serviceRepo.save(workout);
-    }
-
-    public Workout updateExerciseByName(String exerciseName, Workout updateWorkout){
-        Optional<Workout> optionalWorkout = serviceRepo.findByExerciseNameIgnoreCase(exerciseName.trim());
-        if(optionalWorkout.isPresent()){
-            Workout existingWorkout = optionalWorkout.get();
-
-            existingWorkout.setSets(updateWorkout.getSets());
-            existingWorkout.setReps(updateWorkout.getReps());
-            existingWorkout.setWeight(updateWorkout.getWeight());
-            return serviceRepo.save(existingWorkout);
-        }
-        else{
-            return null;
-        }
-    }
-
-    public Workout getWorkoutByName(String exerciseName) {
-        return serviceRepo.findByExerciseNameIgnoreCase(exerciseName.trim()).orElse(null);
-    }
-
-    public boolean deleteById(Long id){
-        if(serviceRepo.existsById(id)){
-            serviceRepo.deleteById(id);
-            return true;
-        }else{
-            return false;
-        }
-
-    }*/
 }

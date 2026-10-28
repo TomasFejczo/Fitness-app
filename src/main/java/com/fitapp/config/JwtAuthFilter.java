@@ -22,69 +22,36 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-   /* @Override
-    protected void doFilterInternal(HttpServletRequest,
-                                    HttpServletResponse,
-                                    FilterChain filterChain)
-            throws ServletException, IOException{
-            final String authHeader = request.getHeader("Authorization");
-            final String jwt;
-            final String username;
-
-            if(authHeader == null || !authHeader.startsWith("Bearer ")){
-                filterChain.doFilter(request, response);
-                return;
-            }
-
-            jwt = authHeader.substring(7);
-            username = jwtService.extractUsername(jwt);
-
-            if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                if(jwtService.isTokenValid(jwt, userDetails.getUsername())){
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                          userDetails,
-                          null,
-                          userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
-            }
-            filterChain.doFilter(request, response);
-    }*/
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         {
             final String authHeader = request.getHeader("Authorization");
-            System.out.println("1. Auth Header: " + authHeader);
+           // System.out.println("1. Auth Header: " + authHeader);
             final String jwt;
             final String username;
 
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                System.out.println("2. Ziadny Bearer header, posielam dalej bez loginu");
+              //  System.out.println("2. Ziadny Bearer header, posielam dalej bez loginu");
                 filterChain.doFilter(request, response);
                 return;
             }
 
             jwt = authHeader.substring(7);
             username = jwtService.extractUsername(jwt);
-            System.out.println("3. Vytiahnute username z tokenu: " + username);
+           // System.out.println("3. Vytiahnute username z tokenu: " + username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                System.out.println("4. UserDetails nacitane pre: " + userDetails.getUsername());
+              //  System.out.println("4. UserDetails nacitane pre: " + userDetails.getUsername());
                 if (jwtService.isTokenValid(jwt, userDetails.getUsername())) {
-                    System.out.println("5. Je token platny? ");
+                //    System.out.println("5. Je token platny? ");
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,
                             userDetails.getAuthorities()
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    System.out.println("6. Uzivatel uspesne nastaveny v SecurityContext!");
+               //     System.out.println("6. Uzivatel uspesne nastaveny v SecurityContext!");
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
